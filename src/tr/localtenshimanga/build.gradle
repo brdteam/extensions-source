@@ -1,0 +1,9 @@
+ext {
+    extName = 'Local Tenshi Manga'
+    extClass = '.LocalTenshiManga'
+    themePkg = 'uzaymanga'
+    overrideVersionCode = 1
+    isNsfw = false
+}
+
+apply plugin: "kei.plugins.extension.legacy"

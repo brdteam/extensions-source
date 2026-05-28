@@ -1,0 +1,9 @@
+ext {
+    extName = 'Local Limon Manga'
+    extClass = '.LocalLimonManga'
+    themePkg = 'uzaymanga'
+    overrideVersionCode = 1
+    isNsfw = false
+}
+
+apply plugin: "kei.plugins.extension.legacy"

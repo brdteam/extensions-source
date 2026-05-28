@@ -1,0 +1,41 @@
+package eu.kanade.tachiyomi.extension.tr.localafroditscans
+
+import eu.kanade.tachiyomi.multisrc.uzaymanga.UzayManga
+import eu.kanade.tachiyomi.source.model.Page
+import eu.kanade.tachiyomi.source.model.SManga
+import okhttp3.Request
+import okhttp3.Response
+
+class LocalAfroditScans :
+    UzayManga(
+        name = "Local Afrodit Scans",
+        baseUrl = "https://afroditscans.com",
+        lang = "tr",
+        versionId = 1,
+    ) {
+    override fun applyUploadPrefix(url: String): String {
+        if (url.contains("/upload/")) return url
+        if (url.contains("/images/manga/")) {
+            return url.replaceFirst("/images/manga/", "/upload/images/manga/")
+        }
+        return super.applyUploadPrefix(url)
+    }
+
+    override fun chapterListRequest(manga: SManga): Request {
+        // Migration from Madara to UzayManga
+        if (manga.url.startsWith("/manga/") && !manga.url.substringAfter("/manga/").substringBefore("/").all { it.isDigit() }) {
+            throw Exception("Migrate from $name to $name (same extension)")
+        }
+        return super.chapterListRequest(manga)
+    }
+
+    override fun pageListParse(response: Response): List<Page> {
+        // Migration from Madara to UzayManga
+        val url = response.request.url.toString().substringAfter(baseUrl)
+        if (!url.startsWith("/manga/")) {
+            throw Exception("Migrate from $name to $name (same extension)")
+        }
+
+        return super.pageListParse(response)
+    }
+}
